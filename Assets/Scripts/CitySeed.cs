@@ -42,6 +42,13 @@ public class CitySeed : MonoBehaviour {
 		
 		System.Random rnd = new System.Random();
 
+		surplus += harvest();
+		int neededSupplies = (population % surplus);
+		population += neededSupplies;
+		surplus -= neededSupplies;
+
+		gold += surplus;
+
 		int goldDiff = gold - lastCensusGold;
 		int popDiff = population - lastCensusPopulation;
 		int surplusDiff = surplus - lastCensusSurplus; 
@@ -67,7 +74,20 @@ public class CitySeed : MonoBehaviour {
 		lastCensusSurplus = surplus;
 	}
 
-	public void addPopulation(int population){
-		this.population += population;
+	public void rain(float saturation){
+		foreach(CropNode c in farms){
+			c.setRainSaturation(saturation);
+		}
+	}
+	
+	public int harvest(){
+
+		int crops = 0;
+
+		foreach(CropNode c in farms){
+			crops+= c.getCurrentYield();
+		}
+
+		return crops;
 	}
 }
