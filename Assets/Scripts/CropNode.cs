@@ -28,7 +28,7 @@ public abstract class CropNode : MonoBehaviour {
 	public int getCurrentYield(){
 		//if rain saturation is over 1, it should produce lower yield, capping at 0% yield for a value of 2
 		//I wanna double check this formula, it made sense on the whiteboard, but math is hard
-		return (int)(maxYield * Mathf.Abs((rainSaturation - 1) - rainSaturation % 1));
+		return (int)(maxYield * Mathf.Abs(((rainSaturation / 1) - 1) - rainSaturation % 1));
 	}
 
 	public void setRainSaturation(float rainSaturation){
