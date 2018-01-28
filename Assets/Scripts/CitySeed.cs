@@ -25,10 +25,11 @@ public class CitySeed : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 		foreach(BuildingNode b in cityMap){
 			if(b.getConstructed()){
 				b.build();
+				population += 25;
 			}
 		}
 	}
@@ -55,6 +56,8 @@ public class CitySeed : MonoBehaviour {
 
 		int newBuildings = (popDiff / 100);
 		int loopCount = 0;
+
+		print(popDiff + "\t" + surplus);
 
 		while(newBuildings > 0 && loopCount < cityMap.Count){
 			BuildingNode b = cityMap[rnd.Next(cityMap.Count)];

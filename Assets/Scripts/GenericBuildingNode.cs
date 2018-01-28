@@ -9,7 +9,7 @@ runtime, rather than having nodes be placed as a specific type
 of building. I normally would do this with just an abstract class
 as the data-type, but Unity doesn't seem to like that idea, figuring
 it out as I go */
-public class GenericBuildingNode : MonoBehaviour {
+public class GenericBuildingNode : BuildingNode {
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +18,20 @@ public class GenericBuildingNode : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
+	}
+
+	public override bool build(){
+
+		return true;
+	}
+
+	public override bool expand(){
+
+		return false;
+	}
+
+	public void instantiate(){
 		
 	}
 }

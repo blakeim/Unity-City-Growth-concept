@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
 
 	private void TaskOnClick(){
 
-		city.addPopulation(100);
+		city.rain(10);
 		city.expand();
 	}
 }
