@@ -16,7 +16,7 @@ public abstract class BuildingNode : MonoBehaviour {
 	[SerializeField]
 	protected bool constructed;
 
-	protected string buildingClass;
+	protected BuildingClass buildingClass;
 
 	public BuildingNode(){
 
@@ -38,7 +38,7 @@ public abstract class BuildingNode : MonoBehaviour {
 		this.location = location;
 	}
 
-	public string getBuildingClass(){
+	public virtual BuildingClass getBuildingClass(){
 		return this.buildingClass;
 	}
 

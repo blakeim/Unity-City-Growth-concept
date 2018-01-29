@@ -34,12 +34,11 @@ public class GenericBuildingNode : BuildingNode {
 		The more buildings of one type around a new node, 
 		the more likely it is to instantiate as that type
 		 */
-
-		 
+ 
 		System.Random rnd = new System.Random();
 
 		switch(rnd.Next(buildingTypes)){
-			case 0:
+		  case 0:
 			  concreteImplementation = new ResidentialBuildingNode(this.GetComponent<Transform>().position);
               break;
           case 1:
@@ -58,5 +57,10 @@ public class GenericBuildingNode : BuildingNode {
 	public override bool expand(){
 
 		return false;
+	}
+
+	public override BuildingClass getBuildingClass(){
+
+		return concreteImplementation.getBuildingClass();
 	}
 }

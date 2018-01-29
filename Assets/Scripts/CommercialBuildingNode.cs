@@ -15,7 +15,7 @@ public class CommercialBuildingNode : BuildingNode {
 	// Use this for initialization
 	new void Start () {
 	
-		this.buildingClass = "Commercial";
+		this.buildingClass = BuildingClass.Commercial;
 	}
 	
 	// Update is called once per frame
