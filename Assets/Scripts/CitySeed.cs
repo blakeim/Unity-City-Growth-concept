@@ -64,9 +64,10 @@ public class CitySeed : MonoBehaviour {
 
 			if(!b.getConstructed()){
 				b.GetComponent<BuildingNode>();
-				b.build();
-				print("Building built");
-				newBuildings -= 1;
+				if(b.build()){
+					print("Building built");
+					newBuildings -= 1;
+				}
 			}
 
 			loopCount += 1;

@@ -7,8 +7,11 @@ a building node to represent a residential building, like a house.
 Residential buildings would have certain layout restrictions, like
 requiring bedrooms and sitting rooms and that. Currently, these
 are represente on the map by green cubes */
-public class ResidentialBuilding : BuildingNode {
+public class ResidentialBuildingNode : BuildingNode {
 
+	public ResidentialBuildingNode(Vector3 location) : base(location){
+		print(location);
+	}
 	// Use this for initialization
 	new void Start () {
 
@@ -23,7 +26,7 @@ public class ResidentialBuilding : BuildingNode {
 	public override bool build(){
 
 		GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        	cube.transform.position = this.transform.position;
+        	cube.transform.position = location;
 
 		cube.SetActive(true);
 		cube.GetComponent<Renderer>().material.color = new Color(0,1,0);

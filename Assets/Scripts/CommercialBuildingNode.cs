@@ -8,10 +8,14 @@ a commercial building, such as a store or a pub, for now
 this is shown on the overworld map as a red cube */
 public class CommercialBuildingNode : BuildingNode {
 
+	public CommercialBuildingNode(Vector3 location) : base(location){
+		print(location);
+	}
+
 	// Use this for initialization
 	new void Start () {
 	
-		this.buildingClass = "Commercial";	
+		this.buildingClass = "Commercial";
 	}
 	
 	// Update is called once per frame
@@ -22,7 +26,7 @@ public class CommercialBuildingNode : BuildingNode {
 	public override bool build(){
 
 		GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        	cube.transform.position = this.transform.position;
+        	cube.transform.position = location;
 
 		cube.SetActive(true);
 		cube.GetComponent<Renderer>().material.color = new Color(1,0,0);
