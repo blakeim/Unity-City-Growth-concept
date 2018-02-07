@@ -14,12 +14,12 @@ public class GenericBuildingNode : BuildingNode {
 	//This is not the best way to do this, but it will get the point across
 	BuildingNode concreteImplementation;
 
-	[SerializeField]
-	int buildingTypes;
-	
+	BuildingClass[] buildingClasses;
+
 	// Use this for initialization
 	void Start () {
 		print("Locatoin \t" + this.transform.position);
+		buildingClasses = (BuildingClass[])System.Enum.GetValues(typeof(BuildingClass));
 	}
 	
 	// Update is called once per frame
@@ -37,12 +37,16 @@ public class GenericBuildingNode : BuildingNode {
 		 */
  
 		System.Random rnd = new System.Random();
+		float[] weightArray = buildingWeights();
+		System.Array.Sort(weightArray);
 
-		switch(rnd.Next(buildingTypes)){
-		  case 0:
+		//this figure isn't right, its not right at all. I need something that will make the calculation biased towards the 
+		//specific class with the highest weight. But I also need something to compile right now before I go to sleep
+		switch((int)System.Math.Ceiling(rnd.Next(buildingClasses.Length) + weightArray[0] * rnd.Next(11))){
+		  case (int)BuildingClass.Residential:
 			  concreteImplementation = new ResidentialBuildingNode(this.GetComponent<Transform>().position);
               break;
-          case 1:
+          case (int)BuildingClass.Commercial:
 		  	  concreteImplementation = new CommercialBuildingNode(this.GetComponent<Transform>().position);
               break;
           default:
@@ -52,6 +56,7 @@ public class GenericBuildingNode : BuildingNode {
 
 		concreteImplementation.build();
 		constructed = true;
+		this.GetComponent<BoxCollider>().enabled = true;
 		return true;
 	}
 
@@ -65,36 +70,40 @@ public class GenericBuildingNode : BuildingNode {
 		return concreteImplementation.getBuildingClass();
 	}
 
-	private int[] buildingWeights(){
+	private float[] buildingWeights(){
 
-		int[] weightArray = new int[buildingTypes];
+		float[] weightArray = new float[buildingClasses.Length];
 
 		/*this loop iterates through the array of weights, that starts empty, and see if any buildings
 		of the corosponding class are found within a set distance. I really hate this. I 
 		hate how not extendable this is, it makes my soul hurt a little bit, but I want to
 		try to proof out this concept, I'll refine it if it works. */
-		foreach(int i in weightArray){
-			
+		for(int i = 0; i < weightArray.Length; i++){
+			weightArray[i] = checkBuildingsAround(buildingClasses[i]);
 		}
 
 		return weightArray;
 	}
 
-	private int checkBuildingsAround(BuildingClass classToCheck){
+	private float checkBuildingsAround(BuildingClass classToCheck){
 
-		RaycastHit hit;
+		RaycastHit[] hits;
 
         Vector3 p1 = transform.position;
-        float distanceToObstacle = 0;
+        float weight = 0;
 
 		/*throw out a sphere, and compare the hits building class to the class given as part of the check call
 		Calculate a weight (that maybe should be a float?) and return it to the caller. Those weights will be 
 		used to fudge the random number in the direction of the building that should be spawned*/	
-        if (Physics.SphereCast(p1, transform.localScale.y, transform.forward, out hit, 10))
+        if ((hits = Physics.SphereCastAll(p1, transform.localScale.y * 3, transform.forward)) != null)
         {
-            distanceToObstacle = hit.distance;
+			foreach(RaycastHit h in hits){
+				if(h.collider.gameObject.GetComponent<BuildingNode>().GetType().Equals(classToCheck)){
+					weight += (1.0f / hits.Length) * 0.1f;
+				}	
+			}
         }
 
-		return 0;
+		return weight;
 	}
 }
