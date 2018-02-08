@@ -17,12 +17,10 @@ public class GenericBuildingNode : BuildingNode {
 	//This is not the best way to do this, but it will get the point across
 	BuildingNode concreteImplementation;
 
-	BuildingClass[] buildingClasses;
+	static BuildingClass[] buildingClasses = (BuildingClass[])System.Enum.GetValues(typeof(BuildingClass));
 
 	// Use this for initialization
 	void Start () {
-		print("Locatoin \t" + this.transform.position);
-		buildingClasses = (BuildingClass[])System.Enum.GetValues(typeof(BuildingClass));
 	}
 	
 	// Update is called once per frame
@@ -110,7 +108,9 @@ public class GenericBuildingNode : BuildingNode {
         if ((hits = Physics.SphereCastAll(p1, transform.localScale.y * 3, transform.forward)) != null)
         {
 			foreach(RaycastHit h in hits){
-				if(h.collider.gameObject.GetComponent<BuildingNode>().GetType().Equals(classToCheck)){
+				if(h.collider.gameObject.GetComponent<BuildingNode>() != null
+					&& h.collider.gameObject.GetComponent<BuildingNode>().getConstructed() 
+					&& h.collider.gameObject.GetComponent<BuildingNode>().GetType().Equals(classToCheck)){
 					weight += (1.0f / hits.Length) * weight_fudge;
 				}	
 			}
