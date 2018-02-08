@@ -11,6 +11,9 @@ as the data-type, but Unity doesn't seem to like that idea, figuring
 it out as I go */
 public class GenericBuildingNode : BuildingNode {
 
+	[SerializeField]
+	float weight_fudge, proximity_threshhold; //this field will be used to adjust the weighting
+
 	//This is not the best way to do this, but it will get the point across
 	BuildingNode concreteImplementation;
 
@@ -37,12 +40,21 @@ public class GenericBuildingNode : BuildingNode {
 		 */
  
 		System.Random rnd = new System.Random();
-		float[] weightArray = buildingWeights();
-		System.Array.Sort(weightArray);
+		SortedDictionary<BuildingClass, float> building_weights = buildingWeights();
 
-		//this figure isn't right, its not right at all. I need something that will make the calculation biased towards the 
-		//specific class with the highest weight. But I also need something to compile right now before I go to sleep
-		switch((int)System.Math.Ceiling(rnd.Next(buildingClasses.Length) + weightArray[0] * rnd.Next(11))){
+		BuildingClass most_frequent = BuildingClass.Residential;
+		float weighting_factor = 0.0f;
+		float temp_output = 0.0f;
+		foreach(BuildingClass b in building_weights.Keys){
+
+			building_weights.TryGetValue(b, out temp_output);
+			if(temp_output > weighting_factor){
+				weighting_factor = temp_output;
+				most_frequent = b;
+			}
+		}
+
+		switch((rnd.NextDouble() + temp_output >= proximity_threshhold ? (int)most_frequent : rnd.Next(buildingClasses.Length)) ){
 		  case (int)BuildingClass.Residential:
 			  concreteImplementation = new ResidentialBuildingNode(this.GetComponent<Transform>().position);
               break;
@@ -70,19 +82,19 @@ public class GenericBuildingNode : BuildingNode {
 		return concreteImplementation.getBuildingClass();
 	}
 
-	private float[] buildingWeights(){
+	private SortedDictionary<BuildingClass, float> buildingWeights(){
 
-		float[] weightArray = new float[buildingClasses.Length];
+		SortedDictionary<BuildingClass, float> building_weights = new SortedDictionary<BuildingClass, float>();
 
 		/*this loop iterates through the array of weights, that starts empty, and see if any buildings
 		of the corosponding class are found within a set distance. I really hate this. I 
 		hate how not extendable this is, it makes my soul hurt a little bit, but I want to
 		try to proof out this concept, I'll refine it if it works. */
-		for(int i = 0; i < weightArray.Length; i++){
-			weightArray[i] = checkBuildingsAround(buildingClasses[i]);
+		foreach(BuildingClass b in buildingClasses){
+			building_weights.Add(b, checkBuildingsAround(b));
 		}
 
-		return weightArray;
+		return building_weights;
 	}
 
 	private float checkBuildingsAround(BuildingClass classToCheck){
@@ -99,7 +111,7 @@ public class GenericBuildingNode : BuildingNode {
         {
 			foreach(RaycastHit h in hits){
 				if(h.collider.gameObject.GetComponent<BuildingNode>().GetType().Equals(classToCheck)){
-					weight += (1.0f / hits.Length) * 0.1f;
+					weight += (1.0f / hits.Length) * weight_fudge;
 				}	
 			}
         }
