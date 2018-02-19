@@ -12,7 +12,7 @@ it out as I go */
 public class GenericBuildingNode : BuildingNode {
 
 	[SerializeField]
-	float weight_fudge, proximity_threshhold; //this field will be used to adjust the weighting
+	float weight_fudge; //this field will be used to adjust the weighting
 
 	//This is not the best way to do this, but it will get the point across
 	BuildingNode concreteImplementation;
@@ -52,7 +52,7 @@ public class GenericBuildingNode : BuildingNode {
 			}
 		}
 
-		switch((rnd.NextDouble() + temp_output >= proximity_threshhold ? (int)most_frequent : rnd.Next(buildingClasses.Length)) ){
+		switch((rnd.NextDouble() <= weighting_factor ? (int)most_frequent : rnd.Next(buildingClasses.Length)) ){
 		  case (int)BuildingClass.Residential:
 			  concreteImplementation = new ResidentialBuildingNode(this.GetComponent<Transform>().position);
               break;
