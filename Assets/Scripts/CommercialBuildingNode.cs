@@ -29,7 +29,7 @@ public class CommercialBuildingNode : BuildingNode {
         	cube.transform.position = location;
 
 		cube.SetActive(true);
-		cube.GetComponent<Renderer>().material.color = new Color(1,0,0);
+		cube.GetComponent<Renderer>().material.color = new Color(0.9f,0.0f,0.0f);
 		cube.GetComponent<Transform>().localScale += new Vector3(7,7,7);
 
 		this.setConstructed(true);

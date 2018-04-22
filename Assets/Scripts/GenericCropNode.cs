@@ -11,7 +11,7 @@ public class GenericCropNode : CropNode {
         cube.transform.position = this.transform.position;
 
 		cube.SetActive(true);
-		cube.GetComponent<Renderer>().material.color = new Color(1,1,0);
+		cube.GetComponent<Renderer>().material.color = new Color(0.9f,0.9f,0.0f);
 		cube.GetComponent<Transform>().localScale += new Vector3(areaW,7, areaH);
 	}
 	
