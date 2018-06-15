@@ -45,10 +45,10 @@ public class CitySeed : MonoBehaviour {
 
 		surplus += harvest();
 		int neededSupplies = (population % surplus);
-		population += neededSupplies;
+		
 		surplus -= neededSupplies;
-
 		gold += surplus;
+		population += surplus;
 
 		int goldDiff = gold - lastCensusGold;
 		int popDiff = population - lastCensusPopulation;
