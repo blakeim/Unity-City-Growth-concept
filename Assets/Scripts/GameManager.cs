@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	IEnumerator GrowthTick(){
-		city.rain(cropYield);
+		city.rain(cropYield * 10);
 		city.expand();
 		ticking = false;
 		return null;
