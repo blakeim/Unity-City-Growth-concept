@@ -9,34 +9,37 @@ public class GameManager : MonoBehaviour {
 	private CitySeed city;
 
 	public Button growthButton;
-	public Slider cropYieldSilder;
-	public Slider timingSlider;
 
-	private float timing = 5;
-	private float cropYield = 10;
+	public float timing{get; set;}
+	public float cropYield{get; set;}
 	private bool ticking;
-
+	private int frameAccumulator;
 	// Use this for initialization
 	void Start () {
 		
 		Button btn = growthButton.GetComponent<Button>();
+		timing = 1;
+		cropYield = 1;
         btn.onClick.AddListener(TaskOnClick);
 		ticking = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-		if(!ticking){
+		frameAccumulator++;
+
+		if(frameAccumulator > timing * (1.0f / Time.deltaTime)){
 			StopAllCoroutines();
 			StartCoroutine("GrowthTick");
+			frameAccumulator = 0;
 		}
 	}
 
 	IEnumerator GrowthTick(){
-		yield return new WaitForSeconds(timing);
 		city.rain(cropYield);
 		city.expand();
+		ticking = false;
+		return null;
 	}
 
 	private void TaskOnClick(){
