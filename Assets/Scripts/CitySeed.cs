@@ -62,8 +62,7 @@ public class CitySeed : MonoBehaviour {
 		while(newBuildings > 0 && loopCount < cityMap.Count){
 			BuildingNode b = cityMap[rnd.Next(cityMap.Count)];
 
-			if(!b.getConstructed()){
-				b.GetComponent<BuildingNode>();
+			if(!b.GetComponent<BuildingNode>().getConstructed()){
 				if(b.build()){
 					print("Building built");
 					newBuildings -= 1;

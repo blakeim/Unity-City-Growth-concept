@@ -13,7 +13,6 @@ public class GenericBuildingNode : BuildingNode {
 
 	[SerializeField]
 	float weight_fudge; //this field will be used to adjust the weighting
-
 	//This is not the best way to do this, but it will get the point across
 	BuildingNode concreteImplementation;
 
@@ -21,6 +20,8 @@ public class GenericBuildingNode : BuildingNode {
 
 	// Use this for initialization
 	void Start () {
+
+		this.setConstructed(false);
 	}
 	
 	// Update is called once per frame
@@ -65,7 +66,7 @@ public class GenericBuildingNode : BuildingNode {
 		}
 
 		concreteImplementation.build();
-		constructed = true;
+		this.setConstructed(true);
 		this.GetComponent<BoxCollider>().enabled = true;
 		return true;
 	}

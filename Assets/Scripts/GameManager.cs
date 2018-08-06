@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 		
 		Button btn = growthButton.GetComponent<Button>();
-		timing = 1;
+		timing = 5;
 		cropYield = 1;
         btn.onClick.AddListener(TaskOnClick);
 		ticking = false;
@@ -26,13 +26,14 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		frameAccumulator++;
 
 		if(frameAccumulator > timing * (1.0f / Time.deltaTime)){
 			StopAllCoroutines();
 			StartCoroutine("GrowthTick");
 			frameAccumulator = 0;
 		}
+
+		frameAccumulator++;
 	}
 
 	IEnumerator GrowthTick(){
