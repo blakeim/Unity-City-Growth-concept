@@ -10,7 +10,6 @@ are represente on the map by green cubes */
 public class ResidentialBuildingNode : BuildingNode {
 
 	public ResidentialBuildingNode(Vector3 location) : base(location){
-		print(location);
 	}
 	// Use this for initialization
 	new void Start () {
@@ -25,14 +24,16 @@ public class ResidentialBuildingNode : BuildingNode {
 
 	public override bool build(){
 
-		GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        	cube.transform.position = location;
+		if(!getConstructed()){
+			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+				cube.transform.position = location;
 
-		cube.SetActive(true);
-		cube.GetComponent<Renderer>().material.color = new Color(0.0f,0.9f,0.0f);
-		cube.GetComponent<Transform>().localScale += new Vector3(7,7,7);
+			cube.SetActive(true);
+			cube.GetComponent<Renderer>().material.color = new Color(0.0f,0.9f,0.0f);
+			cube.GetComponent<Transform>().localScale += new Vector3(7,7,7);
 
-		this.setConstructed(true);
+			this.setConstructed(true);
+		}
 		return true;
 	}
 

@@ -12,9 +12,7 @@ well as gold, and increases in gold will cause buildings to be
 public class CitySeed : MonoBehaviour {
 
 
-	[SerializeField]
 	private List<BuildingNode> cityMap;
-	[SerializeField]
 	private List<CropNode> farms;
 
 	private int gold, population, surplus;
@@ -26,17 +24,23 @@ public class CitySeed : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		foreach(BuildingNode b in cityMap){
-			if(b.getConstructed()){
-				b.build();
-				population += 25;
-			}
+		GameObject[] tempBuildings = GameObject.FindGameObjectsWithTag("Building");
+		GameObject[] tempCrops = GameObject.FindGameObjectsWithTag("Crop");
+
+		cityMap = new List<BuildingNode>();
+		farms = new List<CropNode>();
+
+		foreach(GameObject g in tempBuildings){
+			cityMap.Add(g.GetComponent<BuildingNode>());
+		}
+		foreach(GameObject g in tempCrops){
+			farms.Add(g.GetComponent<CropNode>());
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
 	public void expand(){
@@ -57,14 +61,11 @@ public class CitySeed : MonoBehaviour {
 		int newBuildings = (popDiff / 100);
 		int loopCount = 0;
 
-		print(popDiff + "\t" + surplus);
-
 		while(newBuildings > 0 && loopCount < cityMap.Count){
 			BuildingNode b = cityMap[rnd.Next(cityMap.Count)];
 
-			if(!b.GetComponent<BuildingNode>().getConstructed()){
+			if(b != null && !b.getConstructed()){
 				if(b.build()){
-					print("Building built");
 					newBuildings -= 1;
 				}
 			}

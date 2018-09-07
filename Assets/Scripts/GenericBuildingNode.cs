@@ -14,18 +14,18 @@ public class GenericBuildingNode : BuildingNode {
 	[SerializeField]
 	float weight_fudge; //this field will be used to adjust the weighting
 	//This is not the best way to do this, but it will get the point across
-	BuildingNode concreteImplementation;
+	static BuildingNode concreteImplementation;
 
 	static BuildingClass[] buildingClasses = (BuildingClass[])System.Enum.GetValues(typeof(BuildingClass));
 
 	// Use this for initialization
-	void Start () {
+	new void Start () {
 
 		this.setConstructed(false);
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	new void Update () {
 		
 	}
 
@@ -37,37 +37,40 @@ public class GenericBuildingNode : BuildingNode {
 		The more buildings of one type around a new node, 
 		the more likely it is to instantiate as that type
 		 */
- 
-		System.Random rnd = new System.Random();
-		SortedDictionary<BuildingClass, float> building_weights = buildingWeights();
+		if(concreteImplementation == null){
+			System.Random rnd = new System.Random();
+			SortedDictionary<BuildingClass, float> building_weights = buildingWeights();
 
-		BuildingClass most_frequent = BuildingClass.Residential;
-		float weighting_factor = 0.0f;
-		float temp_output = 0.0f;
-		foreach(BuildingClass b in building_weights.Keys){
+			BuildingClass most_frequent = BuildingClass.Residential;
+			float weighting_factor = 0.0f;
+			float temp_output = 0.0f;
+			foreach(BuildingClass b in building_weights.Keys){
 
-			building_weights.TryGetValue(b, out temp_output);
-			if(temp_output > weighting_factor){
-				weighting_factor = temp_output;
-				most_frequent = b;
+				building_weights.TryGetValue(b, out temp_output);
+				if(temp_output > weighting_factor){
+					weighting_factor = temp_output;
+					most_frequent = b;
+				}
 			}
-		}
 
-		switch((rnd.NextDouble() <= weighting_factor ? (int)most_frequent : rnd.Next(buildingClasses.Length)) ){
-		  case (int)BuildingClass.Residential:
-			  concreteImplementation = new ResidentialBuildingNode(this.GetComponent<Transform>().position);
-              break;
-          case (int)BuildingClass.Commercial:
-		  	  concreteImplementation = new CommercialBuildingNode(this.GetComponent<Transform>().position);
-              break;
-          default:
-		  	  print("No corosponding building type");
-			  return false;	
-		}
+			switch((rnd.NextDouble() <= weighting_factor ? (int)most_frequent : rnd.Next(buildingClasses.Length)) ){
+			case (int)BuildingClass.Residential:
+				concreteImplementation = new ResidentialBuildingNode(this.GetComponent<Transform>().position);
+				break;
+			case (int)BuildingClass.Commercial:
+				concreteImplementation = new CommercialBuildingNode(this.GetComponent<Transform>().position);
+				break;
+			default:
+				print("No corosponding building type");
+				return false;	
+			}
 
-		concreteImplementation.build();
-		this.setConstructed(true);
-		this.GetComponent<BoxCollider>().enabled = true;
+			this.setConstructed(true);
+			this.GetComponent<BoxCollider>().enabled = false;
+			concreteImplementation.build();
+			concreteImplementation.setConstructed(true);
+
+		}
 		return true;
 	}
 

@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
 		timing = 5;
 		cropYield = 1;
         btn.onClick.AddListener(TaskOnClick);
+		city.expand();
 		ticking = false;
 	}
 	
