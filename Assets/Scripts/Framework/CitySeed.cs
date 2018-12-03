@@ -22,7 +22,7 @@ public class CitySeed : MonoBehaviour {
 	private int lastCensusPopulation, lastCensusGold, lastCensusSurplus;
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 
 		GameObject[] tempBuildings = GameObject.FindGameObjectsWithTag("Building");
 		GameObject[] tempCrops = GameObject.FindGameObjectsWithTag("Crop");
@@ -93,5 +93,10 @@ public class CitySeed : MonoBehaviour {
 		}
 
 		return crops;
+	}
+
+	public List<BuildingNode> getCityMap(){
+
+		return this.cityMap;
 	}
 }
