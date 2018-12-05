@@ -36,9 +36,6 @@ sysinfo.txt
 .vscode/tasks.json
 *.unityweb
 *.meta
-Assets/New Terrain.asset
-*.prefab
-Assets/Scenes/CityGrowthScene.unity
 Packages/manifest.json
 ProjectSettings/AudioManager.asset
 ProjectSettings/ClusterInputManager.asset
